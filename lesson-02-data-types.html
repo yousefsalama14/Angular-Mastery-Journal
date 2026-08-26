@@ -109,6 +109,40 @@
   .quiz p{ margin:0; }
   .quiz + .quiz{ margin-top:14px; }
 
+  .practice{
+    background: var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:20px 22px; margin:18px 0;
+  }
+  .practice .q-num{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--muted);
+    letter-spacing:1px; margin-bottom:6px;
+  }
+  .practice .q-prompt{
+    font-family:'Cairo', sans-serif; font-weight:700; font-size:16.5px; margin-bottom:14px;
+  }
+  .practice .q-prompt .code-inline{
+    direction:ltr; display:block; text-align:left; font-family:'JetBrains Mono', monospace;
+    background:var(--code-bg); border:1px solid var(--border); border-radius:10px;
+    padding:12px 14px; font-size:13.5px; margin-top:10px; color:#c9d4de; white-space:pre;
+  }
+  .q-options{ display:flex; flex-direction:column; gap:8px; }
+  .q-opt{
+    font-family:'Tajawal', sans-serif; font-size:15px; text-align:right;
+    background: var(--code-bg); border:1px solid var(--border); color:var(--text);
+    border-radius:10px; padding:11px 14px; cursor:pointer; transition:border-color .15s, background .15s;
+  }
+  .q-opt:hover:not(:disabled){ border-color: var(--teal); }
+  .q-opt:disabled{ cursor:default; }
+  .q-opt.correct{ background: rgba(53,185,156,0.15); border-color: var(--teal); color: var(--teal); }
+  .q-opt.wrong{ background: rgba(226,104,95,0.15); border-color: var(--red); color: var(--red); }
+  .q-feedback{
+    margin-top:12px; padding:12px 14px; border-radius:10px; font-size:14.5px;
+    display:none; line-height:1.8;
+  }
+  .q-feedback.show{ display:block; }
+  .q-feedback.ok{ background: rgba(53,185,156,0.1); border:1px solid rgba(53,185,156,0.3); color:#c8e9e0; }
+  .q-feedback.no{ background: rgba(226,104,95,0.1); border:1px solid rgba(226,104,95,0.3); color:#f0d0cd; }
+  .q-feedback strong{ font-family:'Cairo', sans-serif; }
   .footer-note{ text-align:center; color:var(--muted); font-size:14px; margin-top:50px;}
 </style>
 </head>
@@ -263,8 +297,115 @@ console.<span class="fn">log</span>(<span class="num">5</span> = = = <span class
     <p>"إيه الفرق بين Primitive و Reference types من ناحية الـ memory؟" — أساس لفهم مواضيع أعقد بعدين زي immutability.</p>
   </div>
 
+  <div class="divider"></div>
+
+  <h2><span class="badge">practice</span> تمرين: جرب نفسك</h2>
+  <p class="muted">اختار إجابة لكل سؤال، وهيبان لك على طول لو صح أو غلط مع الشرح.</p>
+
+  <div class="practice" data-question data-correct="a">
+    <div class="q-num">سؤال 1 / 5</div>
+    <div class="q-prompt">
+      إيه نتيجة الكود ده؟
+      <div class="code-inline">let a = 5;
+let b = a;
+b = 10;
+console.log(a);</div>
+    </div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">5</button>
+      <button class="q-opt" data-id="b">10</button>
+      <button class="q-opt" data-id="c">undefined</button>
+      <button class="q-opt" data-id="d">Error</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
+  <div class="practice" data-question data-correct="b">
+    <div class="q-num">سؤال 2 / 5</div>
+    <div class="q-prompt">
+      إيه نتيجة الكود ده؟
+      <div class="code-inline">let obj1 = { x: 1 };
+let obj2 = obj1;
+obj2.x = 99;
+console.log(obj1.x);</div>
+    </div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">1</button>
+      <button class="q-opt" data-id="b">99</button>
+      <button class="q-opt" data-id="c">undefined</button>
+      <button class="q-opt" data-id="d">Error</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
+  <div class="practice" data-question data-correct="c">
+    <div class="q-num">سؤال 3 / 5</div>
+    <div class="q-prompt">إيه نتيجة typeof null؟</div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">"null"</button>
+      <button class="q-opt" data-id="b">"undefined"</button>
+      <button class="q-opt" data-id="c">"object"</button>
+      <button class="q-opt" data-id="d">"boolean"</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
+  <div class="practice" data-question data-correct="a">
+    <div class="q-num">سؤال 4 / 5</div>
+    <div class="q-prompt">إيه نتيجة 0 == "0" ؟</div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">true</button>
+      <button class="q-opt" data-id="b">false</button>
+      <button class="q-opt" data-id="c">Error</button>
+      <button class="q-opt" data-id="d">undefined</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
+  <div class="practice" data-question data-correct="b">
+    <div class="q-num">سؤال 5 / 5</div>
+    <div class="q-prompt">عايز تتأكد إن متغير قيمته null بشكل دقيق ومضمون، تستخدم إيه؟</div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">typeof value === "null"</button>
+      <button class="q-opt" data-id="b">value === null</button>
+      <button class="q-opt" data-id="c">value == undefined</button>
+      <button class="q-opt" data-id="d">typeof value === "object"</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
   <div class="footer-note">الدرس الجاي: Functions — إزاي تكتب وتستخدم الدوال</div>
 
 </div>
+
+<script>
+  const explanations = {
+    0: { ok: "number من نوع Primitive، فلما b = a اتعملت نسخة مستقلة تمامًا. تغيير b مبيأثرش على a خالص.", no: "number من نوع Primitive... النسخ بيتصرف إزاي؟" },
+    1: { ok: "obj1 و obj2 بيشاورو على نفس المكان في الذاكرة، فتغيير obj2 بيأثر على obj1 كمان لأنهم نفس الـ reference.", no: "object من نوع Reference مش Primitive، النسخ هنا بيشاور على نفس المكان." },
+    2: { ok: "typeof null بترجع \"object\" بسبب bug قديم في تصميم اللغة الأساسي، وفضل موجود عشان تصليحه ممكن يكسر مواقع قديمة كتير.", no: "ده bug قديم من أول نسخة من JS سنة 1995، النتيجة الصح هي object." },
+    3: { ok: "== بتعمل type coercion، بتحول \"0\" لرقم قبل المقارنة، فبتطلع true. لو استخدمت === كانت هترجع false.", no: "== بتحول النوعين لنفس النوع الأول قبل المقارنة." },
+    4: { ok: "المقارنة المباشرة value === null هي الطريقة الصحيحة، لأن typeof null بترجع دايمًا \"object\" مش \"null\".", no: "typeof null مش موثوقة، الأفضل مقارنة مباشرة بـ === null." }
+  };
+
+  document.querySelectorAll('[data-question]').forEach((q, idx) => {
+    const correctId = q.dataset.correct;
+    const feedback = q.querySelector('.q-feedback');
+    q.querySelectorAll('.q-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const opts = q.querySelectorAll('.q-opt');
+        opts.forEach(o => o.disabled = true);
+        const isCorrect = btn.dataset.id === correctId;
+        if (isCorrect) {
+          btn.classList.add('correct');
+        } else {
+          btn.classList.add('wrong');
+          q.querySelector('[data-id="' + correctId + '"]').classList.add('correct');
+        }
+        feedback.classList.add('show', isCorrect ? 'ok' : 'no');
+        feedback.innerHTML = '<strong>' + (isCorrect ? 'صح: ' : 'مش صح: ') + '</strong>' + explanations[idx][isCorrect ? 'ok' : 'no'];
+      });
+    });
+  });
+</script>
 </body>
 </html>
