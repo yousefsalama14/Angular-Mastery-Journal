@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدرس 2: أنواع البيانات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;900&family=Tajawal:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #10151c;
+    --card: #1a2129;
+    --border: #26303b;
+    --text: #eceff2;
+    --muted: #8b98a5;
+    --amber: #e3a548;
+    --teal: #35b99c;
+    --red: #e2685f;
+    --purple: #a888e0;
+    --code-bg: #0d1319;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: radial-gradient(circle at 50% 0%, #1b232c 0%, var(--bg) 55%);
+    color: var(--text);
+    font-family:'Tajawal', sans-serif;
+    line-height:1.9;
+    padding: 32px 18px 80px;
+  }
+  .wrap{max-width:720px; margin:0 auto;}
+
+  .series-title{
+    direction: ltr; text-align: right;
+    font-family:'JetBrains Mono', monospace;
+    font-weight:600; font-size:12px; letter-spacing:2.5px;
+    color: var(--amber); margin-bottom:16px;
+  }
+  .eyebrow{ display:flex; align-items:center; gap:10px; color: var(--muted); font-size:14px; margin-bottom:10px;}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);}
+
+  h1{
+    font-family:'Cairo', sans-serif; font-weight:900;
+    font-size: clamp(28px, 6vw, 40px); margin: 0 0 6px; letter-spacing:-0.5px;
+  }
+  .subtitle{ color:var(--muted); font-size:16px; margin-bottom:36px;}
+
+  h2{
+    font-family:'Cairo', sans-serif; font-weight:700; font-size:21px;
+    margin: 44px 0 14px; display:flex; align-items:center; gap:10px;
+  }
+  h2 .badge{
+    font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:600;
+    color: var(--bg); background: var(--teal); padding:3px 9px; border-radius:20px; direction:ltr;
+  }
+  h2 .badge.old{ background: var(--muted); }
+
+  p{ color:#d7dde3; font-size:16.5px; margin:10px 0;}
+  .muted{color:var(--muted); font-size:15px;}
+  .inline-code{ font-family:'JetBrains Mono', monospace; direction:ltr; display:inline-block; background:var(--code-bg); padding:2px 8px; border-radius:6px; font-size:14px;}
+
+  .card{ background: var(--card); border:1px solid var(--border); border-radius:14px; padding:20px 22px; margin:16px 0;}
+
+  .code{
+    direction: ltr; text-align:left;
+    background: var(--code-bg); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; font-family:'JetBrains Mono', monospace; font-size:14px;
+    overflow-x:auto; margin:14px 0; color:#c9d4de;
+  }
+  .code .kw{color:#c586c0;}
+  .code .fn{color:#4fc1e9;}
+  .code .str{color:var(--amber);}
+  .code .cm{color:#5c6773; font-style:italic;}
+  .code .num{color:#d19a66;}
+  .code .lit{color:var(--purple);}
+
+  .code .output{ margin-top:12px; padding-top:10px; border-top:1px dashed var(--border);}
+  .code .output .arrow{ color:var(--muted); margin-left:6px;}
+  .code .output.ok .line{ color: var(--teal); }
+  .code .output.err .line{ color: var(--red); }
+  .code .output.warn .line{ color: var(--amber); }
+
+  table{ width:100%; border-collapse:collapse; margin:16px 0; font-size:15px;}
+  th{ font-family:'Cairo', sans-serif; text-align:right; color:var(--muted); font-weight:700; padding:10px 12px; border-bottom:1px solid var(--border);}
+  td{ padding:12px; border-bottom:1px solid var(--border); }
+  td code{ font-family:'JetBrains Mono', monospace; background:var(--code-bg); padding:2px 8px; border-radius:6px; direction:ltr; display:inline-block;}
+
+  .type-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); gap:10px; margin:18px 0;}
+  .type-chip{
+    background:var(--card); border:1px solid var(--border); border-radius:10px;
+    padding:12px; text-align:center;
+  }
+  .type-chip .name{ font-family:'JetBrains Mono', monospace; direction:ltr; font-size:13px; color:var(--teal); font-weight:600;}
+  .type-chip .ex{ font-family:'JetBrains Mono', monospace; direction:ltr; font-size:12px; color:var(--muted); margin-top:4px;}
+
+  .callout{ border-radius:12px; padding:16px 18px; margin:18px 0; font-size:15.5px;}
+  .callout.tip{ background:rgba(227,165,72,0.1); border:1px solid rgba(227,165,72,0.3); }
+  .callout.tip strong{ color: var(--amber); }
+  .callout.warn{ background:rgba(226,104,95,0.08); border:1px solid rgba(226,104,95,0.3); }
+  .callout.warn strong{ color: var(--red); }
+
+  .divider{ height:1px; background:var(--border); margin:44px 0;}
+
+  .quiz{
+    background: linear-gradient(135deg, rgba(53,185,156,0.08), rgba(53,185,156,0.02));
+    border:1px solid rgba(53,185,156,0.25); border-radius:14px; padding:20px 22px; margin-top:20px;
+  }
+  .quiz .label{ font-family:'Cairo', sans-serif; font-weight:700; color:var(--teal); font-size:14px; margin-bottom:8px;}
+  .quiz p{ margin:0; }
+  .quiz + .quiz{ margin-top:14px; }
+
+  .footer-note{ text-align:center; color:var(--muted); font-size:14px; margin-top:50px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="series-title">ANGULAR MASTERY JOURNAL</div>
+  <div class="eyebrow"><span class="dot"></span> المرحلة 0 · JavaScript · الدرس 2</div>
+  <h1>أنواع البيانات (Data Types)</h1>
+  <div class="subtitle">كل قيمة في JS ليها نوع، والنوع ده بيحدد إيه اللي تقدر تعمله بيها</div>
+
+  <div class="code">
+<span class="kw">let</span> age = <span class="num">25</span>;
+<span class="kw">let</span> name = <span class="str">"Youssef"</span>;
+<span class="kw">let</span> isStudent = <span class="lit">true</span>;
+console.<span class="fn">log</span>(<span class="kw">typeof</span> age, <span class="kw">typeof</span> name, <span class="kw">typeof</span> isStudent);
+    <div class="output ok"><span class="arrow">→</span><span class="line">number string boolean</span></div>
+  </div>
+  <p class="muted"><span class="inline-code">typeof</span> بيقولك نوع القيمة اللي جوه المتغير</p>
+
+  <div class="divider"></div>
+
+  <h2>النوعين الأساسيين: Primitive و Reference</h2>
+  <p>أنواع البيانات في JS بتتقسم قسمين كبار، والفرق بينهم مهم جدًا وهنرجعله كتير:</p>
+
+  <div class="type-grid">
+    <div class="type-chip"><div class="name">string</div><div class="ex">"Youssef"</div></div>
+    <div class="type-chip"><div class="name">number</div><div class="ex">25, 3.14</div></div>
+    <div class="type-chip"><div class="name">boolean</div><div class="ex">true, false</div></div>
+    <div class="type-chip"><div class="name">undefined</div><div class="ex">undefined</div></div>
+    <div class="type-chip"><div class="name">null</div><div class="ex">null</div></div>
+    <div class="type-chip"><div class="name">symbol</div><div class="ex">Symbol()</div></div>
+    <div class="type-chip"><div class="name">bigint</div><div class="ex">123n</div></div>
+  </div>
+  <p class="muted">دول الـ 7 أنواع الـ Primitive (البسيطة). أي حاجة تانية غير كده — زي object, array, function — بتندرج تحت نوع واحد اسمه <span class="inline-code">object</span> وده الـ Reference type.</p>
+
+  <div class="divider"></div>
+
+  <h2>الفرق العملي بينهم: إيه اللي بيتنسخ؟</h2>
+  <p>ده أهم فرق عملي هتشوفه في الشغل كل يوم:</p>
+
+  <div class="card">
+    <p><strong>Primitive:</strong> لما تنسخه، بتاخد نسخة مستقلة تمامًا</p>
+    <div class="code">
+<span class="kw">let</span> a = <span class="num">10</span>;
+<span class="kw">let</span> b = a;
+b = <span class="num">20</span>;
+console.<span class="fn">log</span>(a, b);
+      <div class="output ok"><span class="arrow">→</span><span class="line">10 20</span></div>
+    </div>
+    <p class="muted">تغيير b مأثرش على a خالص، لأن كل واحد فيهم قيمته منفصلة</p>
+  </div>
+
+  <div class="card">
+    <p><strong>Reference (object/array):</strong> لما تنسخه، بتاخد "عنوان" مش القيمة نفسها</p>
+    <div class="code">
+<span class="kw">let</span> obj1 = { age: <span class="num">10</span> };
+<span class="kw">let</span> obj2 = obj1;
+obj2.age = <span class="num">20</span>;
+console.<span class="fn">log</span>(obj1.age, obj2.age);
+      <div class="output warn"><span class="arrow">→</span><span class="line">20 20</span></div>
+    </div>
+    <p class="muted">obj1 اتغيرت هي كمان! لأن obj1 و obj2 بيشاورو على نفس المكان في الذاكرة، مش نسختين منفصلتين</p>
+  </div>
+
+  <div class="callout tip">
+    <strong>هنرجع لها:</strong> النقطة دي بالظبط هي اللي بتفرق كتير في Angular لما نتكلم عن Change Detection وObjects — امتى Angular بيحس إن حاجة اتغيرت وامتى لأ.
+  </div>
+
+  <div class="divider"></div>
+
+  <h2><span class="badge old">legacy</span> قصة undefined و null</h2>
+  <p>الاتنين بيعبروا عن "مفيش قيمة"، بس مش نفس المعنى بالظبط:</p>
+
+  <table>
+    <tr><th>الحالة</th><th>المعنى</th></tr>
+    <tr><td><code>undefined</code></td><td>المتغير اتعرف بس محدش حط له قيمة لسه — JS نفسها بتحطها</td></tr>
+    <tr><td><code>null</code></td><td>إنت شخصيًا قررت إن "مفيش قيمة هنا"، بشكل متعمد</td></tr>
+  </table>
+
+  <div class="code">
+<span class="kw">let</span> city;
+console.<span class="fn">log</span>(city);
+    <div class="output ok"><span class="arrow">→</span><span class="line">undefined</span></div>
+  </div>
+
+  <div class="callout warn">
+    <strong>مصيدة شهيرة في المقابلات:</strong> جرب <span class="inline-code" style="background:rgba(226,104,95,0.15);">typeof null</span> هتلاقيها بترجع <span class="inline-code" style="background:rgba(226,104,95,0.15);">"object"</span> مش <span class="inline-code" style="background:rgba(226,104,95,0.15);">"null"</span>. ده معروف إنه bug قديم في تصميم JS الأساسي من أول نسخة، وفضل موجود لحد دلوقتي عشان تصليحه ممكن يكسر مواقع قديمة كتير جدًا لو اتصلح.
+  </div>
+
+  <div class="divider"></div>
+
+  <h2>Dynamic Typing — إيه اللي بيميز JS</h2>
+  <p>في JS، نفس المتغير ممكن يحمل أنواع مختلفة في أوقات مختلفة، من غير ما تحدد النوع مقدمًا:</p>
+
+  <div class="code">
+<span class="kw">let</span> value = <span class="num">10</span>;
+value = <span class="str">"hello"</span>;
+value = <span class="lit">true</span>;
+    <div class="output ok"><span class="arrow">→</span><span class="line">JS مبتشتكيش، الاتنين شغالين</span></div>
+  </div>
+
+  <p class="muted">ده مختلف عن لغات زي Java أو C# اللي المتغير فيها بيتحدد نوعه من الأول ومينفعش يتغير. لما نوصل لـ TypeScript (اللي Angular مبني عليه)، هنرجع لنفس القدرة دي بس بشكل أكتر أمانًا.</p>
+
+  <div class="divider"></div>
+
+  <h2>مصيدة تانية: = = مقابل = = =</h2>
+  <p>عشان JS بتحاول تكون "مرنة" في المقارنة، فيه فرق مهم بين عاملين:</p>
+
+  <div class="code">
+console.<span class="fn">log</span>(<span class="num">5</span> = = <span class="str">"5"</span>);
+console.<span class="fn">log</span>(<span class="num">5</span> = = = <span class="str">"5"</span>);
+    <div class="output warn"><span class="arrow">→</span><span class="line">true</span></div>
+    <div class="output err"><span class="arrow">→</span><span class="line">false</span></div>
+  </div>
+
+  <table>
+    <tr><th>العامل</th><th>بيعمل إيه</th></tr>
+    <tr><td><code>= =</code></td><td>بيحاول يحوّل النوعين لنفس النوع الأول، وبعدين يقارن</td></tr>
+    <tr><td><code>= = =</code></td><td>بيقارن القيمة والنوع مع بعض، من غير أي تحويل</td></tr>
+  </table>
+
+  <div class="callout tip">
+    <strong>القاعدة العملية:</strong> استخدم <span class="inline-code" style="background:rgba(227,165,72,0.15);">= = =</span> دايمًا تقريبًا. الـ <span class="inline-code" style="background:rgba(227,165,72,0.15);">= =</span> بيسبب bugs غريبة وغير متوقعة، وده سبب رئيسي إن TypeScript بيمنع المقارنة الغلط دي من الأساس.
+  </div>
+
+  <div class="divider"></div>
+
+  <h2>خلاصة: امتى تستخدم كل نوع</h2>
+  <table>
+    <tr><th>النوع</th><th>تستخدمه لـ</th></tr>
+    <tr><td><code>string</code></td><td>نصوص، أسماء، رسايل</td></tr>
+    <tr><td><code>number</code></td><td>أعمار، أسعار، أي حساب رياضي</td></tr>
+    <tr><td><code>boolean</code></td><td>حالات true/false، شروط</td></tr>
+    <tr><td><code>undefined</code></td><td>سيبها لـ JS، متحطهاش إنت يدويًا عادة</td></tr>
+    <tr><td><code>null</code></td><td>لما تقصد إنت بنفسك "مفيش قيمة" بشكل متعمد</td></tr>
+    <tr><td><code>object/array</code></td><td>بيانات مركبة، مجموعة قيم مرتبطة ببعض</td></tr>
+  </table>
+
+  <div class="quiz">
+    <div class="label">سؤال مقابلة 1</div>
+    <p>"إيه الفرق بين = = و = = =؟" — سؤال أساسي في أي مقابلة JS مهما كان مستواها.</p>
+  </div>
+
+  <div class="quiz">
+    <div class="label">سؤال مقابلة 2</div>
+    <p>"إيه نتيجة typeof null وليه؟" — سؤال بيفرق بين اللي فاهم تفاصيل اللغة واللي حافظ بس.</p>
+  </div>
+
+  <div class="quiz">
+    <div class="label">سؤال مقابلة 3</div>
+    <p>"إيه الفرق بين Primitive و Reference types من ناحية الـ memory؟" — أساس لفهم مواضيع أعقد بعدين زي immutability.</p>
+  </div>
+
+  <div class="footer-note">الدرس الجاي: Functions — إزاي تكتب وتستخدم الدوال</div>
+
+</div>
+</body>
+</html>
