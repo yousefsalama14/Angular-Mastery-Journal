@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدرس 1: المتغيرات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;900&family=Tajawal:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #10151c;
+    --bg-soft: #161d26;
+    --card: #1a2129;
+    --border: #26303b;
+    --text: #eceff2;
+    --muted: #8b98a5;
+    --amber: #e3a548;
+    --teal: #35b99c;
+    --red: #e2685f;
+    --code-bg: #0d1319;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: radial-gradient(circle at 50% 0%, #1b232c 0%, var(--bg) 55%);
+    color: var(--text);
+    font-family:'Tajawal', sans-serif;
+    line-height:1.9;
+    padding: 32px 18px 80px;
+  }
+  .wrap{max-width:720px; margin:0 auto;}
+
+  .series-title{
+    direction: ltr;
+    text-align: right;
+    font-family:'JetBrains Mono', monospace;
+    font-weight:600;
+    font-size:12px;
+    letter-spacing:2.5px;
+    color: var(--amber);
+    margin-bottom:16px;
+  }
+
+  .eyebrow{
+    display:flex; align-items:center; gap:10px;
+    color: var(--muted); font-size:14px; margin-bottom:10px;
+  }
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);}
+
+  h1{
+    font-family:'Cairo', sans-serif;
+    font-weight:900;
+    font-size: clamp(28px, 6vw, 40px);
+    margin: 0 0 6px;
+    letter-spacing:-0.5px;
+  }
+  .subtitle{ color:var(--muted); font-size:16px; margin-bottom:36px;}
+
+  h2{
+    font-family:'Cairo', sans-serif;
+    font-weight:700;
+    font-size:21px;
+    margin: 44px 0 14px;
+    display:flex; align-items:center; gap:10px;
+  }
+  h2 .badge{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px; font-weight:600;
+    color: var(--bg);
+    background: var(--teal);
+    padding:3px 9px;
+    border-radius:20px;
+    direction:ltr;
+  }
+
+  p{ color:#d7dde3; font-size:16.5px; margin:10px 0;}
+  .muted{color:var(--muted); font-size:15px;}
+
+  .card{
+    background: var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:20px 22px;
+    margin:16px 0;
+  }
+
+  .code{
+    direction: ltr;
+    text-align:left;
+    background: var(--code-bg);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:16px 18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:14px;
+    overflow-x:auto;
+    margin:14px 0;
+    color:#c9d4de;
+  }
+  .code .kw{color:#c586c0;}
+  .code .fn{color:#4fc1e9;}
+  .code .str{color:var(--amber);}
+  .code .cm{color:#5c6773; font-style:italic;}
+  .code .num{color:#d19a66;}
+
+  .result{
+    direction: ltr;
+    text-align:left;
+    font-family:'JetBrains Mono', monospace;
+    font-size:13.5px;
+    border-radius:10px;
+    padding:10px 14px;
+    margin-top:-4px;
+    display:inline-block;
+  }
+  .result.ok{ background: rgba(53,185,156,0.12); color: var(--teal); border:1px solid rgba(53,185,156,0.3);}
+  .result.err{ background: rgba(226,104,95,0.12); color: var(--red); border:1px solid rgba(226,104,95,0.3);}
+
+  table{ width:100%; border-collapse:collapse; margin:16px 0; font-size:15px;}
+  th{ font-family:'Cairo', sans-serif; text-align:right; color:var(--muted); font-weight:700; padding:10px 12px; border-bottom:1px solid var(--border);}
+  td{ padding:12px; border-bottom:1px solid var(--border); }
+  td code{ font-family:'JetBrains Mono', monospace; background:var(--code-bg); padding:2px 8px; border-radius:6px; direction:ltr; display:inline-block;}
+
+  .scope-diagram{ margin: 18px 0; }
+  .scope-diagram svg{ width:100%; height:auto; display:block; }
+
+  .callout{
+    border-radius:12px;
+    padding:16px 18px;
+    margin:18px 0;
+    font-size:15.5px;
+  }
+  .callout.tip{ background:rgba(227,165,72,0.1); border:1px solid rgba(227,165,72,0.3); }
+  .callout.tip strong{ color: var(--amber); }
+
+  .divider{ height:1px; background:var(--border); margin:44px 0;}
+
+  .quiz{
+    background: linear-gradient(135deg, rgba(53,185,156,0.08), rgba(53,185,156,0.02));
+    border:1px solid rgba(53,185,156,0.25);
+    border-radius:14px;
+    padding:20px 22px;
+    margin-top:20px;
+  }
+  .quiz .label{ font-family:'Cairo', sans-serif; font-weight:700; color:var(--teal); font-size:14px; margin-bottom:8px;}
+  .quiz p{ margin:0; }
+
+  .footer-note{
+    text-align:center;
+    color:var(--muted);
+    font-size:14px;
+    margin-top:50px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="series-title">ANGULAR MASTERY JOURNAL</div>
+  <div class="eyebrow"><span class="dot"></span> المرحلة 0 · JavaScript · الدرس 1</div>
+  <h1>المتغيرات (Variables)</h1>
+  <div class="subtitle">علبة بتحفظلك قيمة عشان تستخدمها تاني بدل ما تكتبها كل مرة</div>
+
+  <div class="code">
+<span class="kw">let</span> name = <span class="str">"Youssef"</span>;
+console.<span class="fn">log</span>(name);
+  </div>
+  <div class="result ok">Youssef</div>
+
+  <div class="divider"></div>
+
+  <h2>الأنواع التلاتة</h2>
+  <p>في JS فيه 3 طرق تعرّف بيها متغير:</p>
+
+  <div class="card">
+    <p><strong>1. var</strong> — القديم، من زمان</p>
+    <div class="code"><span class="kw">var</span> age = <span class="num">25</span>;</div>
+
+    <p><strong>2. let</strong> — الجديد، ينفع تغيّره</p>
+    <div class="code"><span class="kw">let</span> age = <span class="num">25</span>;
+age = <span class="num">26</span>; <span class="cm">// تمام، اتغيرت</span></div>
+
+    <p><strong>3. const</strong> — الجديد، لما القيمة مش هتتغير</p>
+    <div class="code"><span class="kw">const</span> age = <span class="num">25</span>;
+age = <span class="num">26</span>;</div>
+    <div class="result err">TypeError: Assignment to constant variable.</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h2><span class="badge">why</span> ليه اتعمل let/const أصلاً؟</h2>
+  <p>عند <code style="direction:ltr;display:inline-block;background:var(--code-bg);padding:2px 8px;border-radius:6px;">var</code> مشكلة اسمها <strong>Scope</strong> (نطاق الرؤية). المتغير بيقدر "يهرب" من مكان مفروض يكون محبوس فيه.</p>
+
+  <div class="scope-diagram">
+    <svg viewBox="0 0 640 210" xmlns="http://www.w3.org/2000/svg">
+      <!-- var box: leaks out -->
+      <rect x="40" y="20" width="220" height="90" rx="10" fill="none" stroke="#3a4552" stroke-width="1.5" stroke-dasharray="5,4"/>
+      <text x="150" y="14" font-family="JetBrains Mono, monospace" font-size="11" fill="#8b98a5" text-anchor="middle">if (true) { ... }</text>
+      <rect x="70" y="45" width="50" height="26" rx="6" fill="#e3a548" opacity="0.85"/>
+      <text x="95" y="62" font-family="JetBrains Mono, monospace" font-size="12" fill="#10151c" text-anchor="middle" font-weight="600">var x</text>
+      <line x1="120" y1="58" x2="230" y2="58" stroke="#e3a548" stroke-width="2" marker-end="url(#arrowAmber)"/>
+      <rect x="235" y="45" width="50" height="26" rx="6" fill="#e3a548"/>
+      <text x="260" y="62" font-family="JetBrains Mono, monospace" font-size="12" fill="#10151c" text-anchor="middle" font-weight="600">x = 10</text>
+      <text x="150" y="150" font-family="Tajawal, sans-serif" font-size="13" fill="#8b98a5" text-anchor="middle">x بيهرب برا الحدود</text>
+
+      <!-- let box: trapped -->
+      <rect x="360" y="20" width="220" height="90" rx="10" fill="rgba(53,185,156,0.06)" stroke="#35b99c" stroke-width="1.5"/>
+      <text x="470" y="14" font-family="JetBrains Mono, monospace" font-size="11" fill="#8b98a5" text-anchor="middle">if (true) { ... }</text>
+      <rect x="440" y="45" width="55" height="26" rx="6" fill="#35b99c"/>
+      <text x="467" y="62" font-family="JetBrains Mono, monospace" font-size="12" fill="#0d1319" text-anchor="middle" font-weight="600">let y</text>
+      <text x="470" y="150" font-family="Tajawal, sans-serif" font-size="13" fill="#8b98a5" text-anchor="middle">y محبوس جوه الحدود</text>
+
+      <defs>
+        <marker id="arrowAmber" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8 Z" fill="#e3a548"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="code">
+<span class="kw">if</span> (<span class="kw">true</span>) {
+  <span class="kw">var</span> x = <span class="num">10</span>;
+}
+console.<span class="fn">log</span>(x);
+  </div>
+  <div class="result ok">10</div>
+  <p class="muted">x اتعرف جوه الـ if، بس طلع منها بسهولة. ده بيسبب bugs في المشاريع الكبيرة لأن متغيرات بتتسرب لأماكن مش المفروض تكون فيها.</p>
+
+  <div class="code">
+<span class="kw">if</span> (<span class="kw">true</span>) {
+  <span class="kw">let</span> y = <span class="num">10</span>;
+}
+console.<span class="fn">log</span>(y);
+  </div>
+  <div class="result err">Uncaught ReferenceError: y is not defined</div>
+  <p class="muted">y اتحبس جوه أقواس الـ if ومقدرش يطلع. ده اسمه <strong style="color:var(--teal)">Block Scope</strong>، وده السلوك الصح.</p>
+
+  <div class="divider"></div>
+
+  <h2>امتى تستخدم كل واحد؟</h2>
+  <table>
+    <tr><th>النوع</th><th>استخدمه لما</th></tr>
+    <tr><td><code>const</code></td><td>القيمة مش هتتغير — الافتراضي في 90% من الحالات</td></tr>
+    <tr><td><code>let</code></td><td>القيمة هتتغير لاحقًا، زي counter</td></tr>
+    <tr><td><code>var</code></td><td>متستخدموش خالص — موجود بس عشان كود قديم</td></tr>
+  </table>
+
+  <div class="callout tip">
+    <strong>خلفية:</strong> الـ JS engine بيعمل حاجة اسمها Hoisting — بيرفع تعريفات المتغيرات لفوق الملف قبل التنفيذ.
+    var بترفع وتتحط قيمتها undefined، أما let/const بترفع بس بتفضل في منطقة اسمها Temporal Dead Zone، يعني موجودة بس متقدرش توصلها قبل سطرها.
+  </div>
+
+  <div class="divider"></div>
+
+  <h2>نقطة مهمة: const مع object</h2>
+  <p>const مش معناها إن القيمة متجمدة تمامًا. لو كانت object، تقدر تغيّر محتوياته:</p>
+
+  <div class="code">
+<span class="kw">const</span> person = { name: <span class="str">"Youssef"</span> };
+person.name = <span class="str">"Ahmed"</span>; <span class="cm">// تمام، شغالة</span>
+  </div>
+
+  <div class="code">
+<span class="kw">const</span> person = { name: <span class="str">"Youssef"</span> };
+person = { name: <span class="str">"Ahmed"</span> }; <span class="cm">// استبدال كامل</span>
+  </div>
+  <div class="result err">TypeError: Assignment to constant variable.</div>
+  <p class="muted">const بتمنع استبدال المتغير نفسه، مش تغيير محتوياته. هنرجعلها بالتفصيل عند Objects.</p>
+
+  <div class="quiz">
+    <div class="label">سؤال مقابلة</div>
+    <p>"إيه الفرق بين var و let و const؟" — من أشهر أسئلة الـ JS في أي مقابلة frontend.</p>
+  </div>
+
+  <div class="footer-note">الدرس الجاي: Data Types — الأنواع المختلفة للقيم</div>
+
+</div>
+</body>
+</html>
