@@ -103,18 +103,14 @@
   .code .cm{color:#5c6773; font-style:italic;}
   .code .num{color:#d19a66;}
 
-  .result{
-    direction: ltr;
-    text-align:left;
-    font-family:'JetBrains Mono', monospace;
-    font-size:13.5px;
-    border-radius:10px;
-    padding:10px 14px;
-    margin-top:-4px;
-    display:inline-block;
+  .code .output{
+    margin-top:12px;
+    padding-top:10px;
+    border-top:1px dashed var(--border);
   }
-  .result.ok{ background: rgba(53,185,156,0.12); color: var(--teal); border:1px solid rgba(53,185,156,0.3);}
-  .result.err{ background: rgba(226,104,95,0.12); color: var(--red); border:1px solid rgba(226,104,95,0.3);}
+  .code .output .arrow{ color:var(--muted); margin-left:6px;}
+  .code .output.ok .line{ color: var(--teal); }
+  .code .output.err .line{ color: var(--red); }
 
   table{ width:100%; border-collapse:collapse; margin:16px 0; font-size:15px;}
   th{ font-family:'Cairo', sans-serif; text-align:right; color:var(--muted); font-weight:700; padding:10px 12px; border-bottom:1px solid var(--border);}
@@ -164,8 +160,8 @@
   <div class="code">
 <span class="kw">let</span> name = <span class="str">"Youssef"</span>;
 console.<span class="fn">log</span>(name);
+    <div class="output ok"><span class="arrow">→</span><span class="line">Youssef</span></div>
   </div>
-  <div class="result ok">Youssef</div>
 
   <div class="divider"></div>
 
@@ -182,8 +178,9 @@ age = <span class="num">26</span>; <span class="cm">// تمام، اتغيرت</
 
     <p><strong>3. const</strong> — الجديد، لما القيمة مش هتتغير</p>
     <div class="code"><span class="kw">const</span> age = <span class="num">25</span>;
-age = <span class="num">26</span>;</div>
-    <div class="result err">TypeError: Assignment to constant variable.</div>
+age = <span class="num">26</span>;
+      <div class="output err"><span class="arrow">→</span><span class="line">TypeError: Assignment to constant variable.</span></div>
+    </div>
   </div>
 
   <div class="divider"></div>
@@ -223,8 +220,8 @@ age = <span class="num">26</span>;</div>
   <span class="kw">var</span> x = <span class="num">10</span>;
 }
 console.<span class="fn">log</span>(x);
+    <div class="output ok"><span class="arrow">→</span><span class="line">10</span></div>
   </div>
-  <div class="result ok">10</div>
   <p class="muted">x اتعرف جوه الـ if، بس طلع منها بسهولة. ده بيسبب bugs في المشاريع الكبيرة لأن متغيرات بتتسرب لأماكن مش المفروض تكون فيها.</p>
 
   <div class="code">
@@ -232,8 +229,8 @@ console.<span class="fn">log</span>(x);
   <span class="kw">let</span> y = <span class="num">10</span>;
 }
 console.<span class="fn">log</span>(y);
+    <div class="output err"><span class="arrow">→</span><span class="line">Uncaught ReferenceError: y is not defined</span></div>
   </div>
-  <div class="result err">Uncaught ReferenceError: y is not defined</div>
   <p class="muted">y اتحبس جوه أقواس الـ if ومقدرش يطلع. ده اسمه <strong style="color:var(--teal)">Block Scope</strong>، وده السلوك الصح.</p>
 
   <div class="divider"></div>
@@ -264,8 +261,8 @@ person.name = <span class="str">"Ahmed"</span>; <span class="cm">// تمام، �
   <div class="code">
 <span class="kw">const</span> person = { name: <span class="str">"Youssef"</span> };
 person = { name: <span class="str">"Ahmed"</span> }; <span class="cm">// استبدال كامل</span>
+    <div class="output err"><span class="arrow">→</span><span class="line">TypeError: Assignment to constant variable.</span></div>
   </div>
-  <div class="result err">TypeError: Assignment to constant variable.</div>
   <p class="muted">const بتمنع استبدال المتغير نفسه، مش تغيير محتوياته. هنرجعلها بالتفصيل عند Objects.</p>
 
   <div class="quiz">
