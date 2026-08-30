@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدرس 4: المصفوفات والكائنات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;900&family=Tajawal:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #10151c;
+    --card: #1a2129;
+    --border: #26303b;
+    --text: #eceff2;
+    --muted: #8b98a5;
+    --amber: #e3a548;
+    --teal: #35b99c;
+    --red: #e2685f;
+    --purple: #a888e0;
+    --code-bg: #0d1319;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: radial-gradient(circle at 50% 0%, #1b232c 0%, var(--bg) 55%);
+    color: var(--text);
+    font-family:'Tajawal', sans-serif;
+    line-height:1.9;
+    padding: 32px 18px 80px;
+  }
+  .wrap{max-width:720px; margin:0 auto;}
+
+  .series-title{
+    direction: ltr; text-align: right;
+    font-family:'JetBrains Mono', monospace;
+    font-weight:600; font-size:12px; letter-spacing:2.5px;
+    color: var(--amber); margin-bottom:16px;
+  }
+  .eyebrow{ display:flex; align-items:center; gap:10px; color: var(--muted); font-size:14px; margin-bottom:10px;}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);}
+
+  h1{
+    font-family:'Cairo', sans-serif; font-weight:900;
+    font-size: clamp(28px, 6vw, 40px); margin: 0 0 6px; letter-spacing:-0.5px;
+  }
+  .subtitle{ color:var(--muted); font-size:16px; margin-bottom:36px;}
+
+  h2{
+    font-family:'Cairo', sans-serif; font-weight:700; font-size:21px;
+    margin: 44px 0 14px; display:flex; align-items:center; gap:10px;
+  }
+  h2 .badge{
+    font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:600;
+    color: var(--bg); background: var(--teal); padding:3px 9px; border-radius:20px; direction:ltr;
+  }
+  h2 .badge.old{ background: var(--muted); }
+
+  p{ color:#d7dde3; font-size:16.5px; margin:10px 0;}
+  .muted{color:var(--muted); font-size:15px;}
+  .inline-code{ font-family:'JetBrains Mono', monospace; direction:ltr; display:inline-block; background:var(--code-bg); padding:2px 8px; border-radius:6px; font-size:14px;}
+
+  .card{ background: var(--card); border:1px solid var(--border); border-radius:14px; padding:20px 22px; margin:16px 0;}
+
+  .code{
+    direction: ltr; text-align:left;
+    background: var(--code-bg); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; font-family:'JetBrains Mono', monospace; font-size:14px;
+    overflow-x:auto; margin:14px 0; color:#c9d4de; white-space:pre-wrap;
+  }
+  .code .kw{color:#c586c0;}
+  .code .fn{color:#4fc1e9;}
+  .code .str{color:var(--amber);}
+  .code .cm{color:#5c6773; font-style:italic;}
+  .code .num{color:#d19a66;}
+  .code .lit{color:var(--purple);}
+
+  .code .output{ margin-top:12px; padding-top:10px; border-top:1px dashed var(--border);}
+  .code .output .arrow{ color:var(--muted); margin-left:6px;}
+  .code .output.ok .line{ color: var(--teal); }
+  .code .output.err .line{ color: var(--red); }
+  .code .output.warn .line{ color: var(--amber); }
+
+  table{ width:100%; border-collapse:collapse; margin:16px 0; font-size:15px;}
+  th{ font-family:'Cairo', sans-serif; text-align:right; color:var(--muted); font-weight:700; padding:10px 12px; border-bottom:1px solid var(--border);}
+  td{ padding:12px; border-bottom:1px solid var(--border); }
+  td code{ font-family:'JetBrains Mono', monospace; background:var(--code-bg); padding:2px 8px; border-radius:6px; direction:ltr; display:inline-block;}
+
+  .scope-diagram{ margin: 18px 0; }
+  .scope-diagram svg{ width:100%; height:auto; display:block; }
+
+  .callout{ border-radius:12px; padding:16px 18px; margin:18px 0; font-size:15.5px;}
+  .callout.tip{ background:rgba(227,165,72,0.1); border:1px solid rgba(227,165,72,0.3); }
+  .callout.tip strong{ color: var(--amber); }
+  .callout.warn{ background:rgba(226,104,95,0.08); border:1px solid rgba(226,104,95,0.3); }
+  .callout.warn strong{ color: var(--red); }
+
+  .divider{ height:1px; background:var(--border); margin:44px 0;}
+
+  .quiz{
+    background: linear-gradient(135deg, rgba(53,185,156,0.08), rgba(53,185,156,0.02));
+    border:1px solid rgba(53,185,156,0.25); border-radius:14px; padding:20px 22px; margin-top:20px;
+  }
+  .quiz .label{ font-family:'Cairo', sans-serif; font-weight:700; color:var(--teal); font-size:14px; margin-bottom:8px;}
+  .quiz p{ margin:0; }
+  .quiz + .quiz{ margin-top:14px; }
+
+  .practice{
+    background: var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:20px 22px; margin:18px 0;
+  }
+  .practice .q-num{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--muted);
+    letter-spacing:1px; margin-bottom:6px;
+  }
+  .practice .q-prompt{
+    font-family:'Cairo', sans-serif; font-weight:700; font-size:16.5px; margin-bottom:14px;
+  }
+  .practice .q-prompt .code-inline{
+    direction:ltr; display:block; text-align:left; font-family:'JetBrains Mono', monospace;
+    background:var(--code-bg); border:1px solid var(--border); border-radius:10px;
+    padding:12px 14px; font-size:13.5px; margin-top:10px; color:#c9d4de; white-space:pre;
+  }
+  .q-options{ display:flex; flex-direction:column; gap:8px; }
+  .q-opt{
+    font-family:'Tajawal', sans-serif; font-size:15px; text-align:right;
+    background: var(--code-bg); border:1px solid var(--border); color:var(--text);
+    border-radius:10px; padding:11px 14px; cursor:pointer; transition:border-color .15s, background .15s;
+  }
+  .q-opt:hover:not(:disabled){ border-color: var(--teal); }
+  .q-opt:disabled{ cursor:default; }
+  .q-opt.correct{ background: rgba(53,185,156,0.15); border-color: var(--teal); color: var(--teal); }
+  .q-opt.wrong{ background: rgba(226,104,95,0.15); border-color: var(--red); color: var(--red); }
+  .q-feedback{
+    margin-top:12px; padding:12px 14px; border-radius:10px; font-size:14.5px;
+    display:none; line-height:1.8;
+  }
+  .q-feedback.show{ display:block; }
+  .q-feedback.ok{ background: rgba(53,185,156,0.1); border:1px solid rgba(53,185,156,0.3); color:#c8e9e0; }
+  .q-feedback.no{ background: rgba(226,104,95,0.1); border:1px solid rgba(226,104,95,0.3); color:#f0d0cd; }
+  .q-feedback strong{ font-family:'Cairo', sans-serif; }
+
+  .footer-note{ text-align:center; color:var(--muted); font-size:14px; margin-top:50px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="series-title">ANGULAR MASTERY JOURNAL</div>
+  <div class="eyebrow"><span class="dot"></span> المرحلة 0 · JavaScript · الدرس 4</div>
+  <h1>المصفوفات والكائنات (Arrays & Objects)</h1>
+  <div class="subtitle">إزاي تخزن مجموعة بيانات مرتبطة ببعض، مش قيمة واحدة بس</div>
+
+  <div class="callout tip">
+    <strong>بمنطق بسيط:</strong> Array زي رف كتب — كل كتاب له مكان مرقّم (0، 1، 2...). Object زي دولاب ملفات — كل حاجة ليها اسم مكتوب عليها (label)، مش رقم.
+  </div>
+
+  <div class="divider"></div>
+
+  <h2>Arrays — قوائم مرتبة بأرقام</h2>
+
+  <div class="code">
+<span class="kw">const</span> hobbies = [<span class="str">"coding"</span>, <span class="str">"reading"</span>, <span class="str">"gym"</span>];
+console.<span class="fn">log</span>(hobbies[<span class="num">0</span>]);
+console.<span class="fn">log</span>(hobbies.length);
+    <div class="output ok"><span class="arrow">→</span><span class="line">coding</span></div>
+    <div class="output ok"><span class="arrow">→</span><span class="line">3</span></div>
+  </div>
+  <p class="muted">كل عنصر في الـ Array له "رقم مكان" (index)، وبيبدأ من صفر مش من واحد. أول عنصر index بتاعه 0، مش 1.</p>
+
+  <div class="scope-diagram">
+    <svg viewBox="0 0 640 130" xmlns="http://www.w3.org/2000/svg">
+      <text x="320" y="18" font-family="Cairo, sans-serif" font-size="13" font-weight="700" fill="#e3a548" text-anchor="middle">hobbies array</text>
+      <rect x="60" y="35" width="140" height="50" rx="8" fill="#1a2129" stroke="#35b99c" stroke-width="1.5"/>
+      <text x="130" y="55" font-family="JetBrains Mono, monospace" font-size="12" fill="#35b99c" text-anchor="middle">index 0</text>
+      <text x="130" y="74" font-family="JetBrains Mono, monospace" font-size="12" fill="#eceff2" text-anchor="middle">"coding"</text>
+
+      <rect x="250" y="35" width="140" height="50" rx="8" fill="#1a2129" stroke="#e3a548" stroke-width="1.5"/>
+      <text x="320" y="55" font-family="JetBrains Mono, monospace" font-size="12" fill="#e3a548" text-anchor="middle">index 1</text>
+      <text x="320" y="74" font-family="JetBrains Mono, monospace" font-size="12" fill="#eceff2" text-anchor="middle">"reading"</text>
+
+      <rect x="440" y="35" width="140" height="50" rx="8" fill="#1a2129" stroke="#a888e0" stroke-width="1.5"/>
+      <text x="510" y="55" font-family="JetBrains Mono, monospace" font-size="12" fill="#a888e0" text-anchor="middle">index 2</text>
+      <text x="510" y="74" font-family="JetBrains Mono, monospace" font-size="12" fill="#eceff2" text-anchor="middle">"gym"</text>
+
+      <text x="320" y="112" font-family="Tajawal, sans-serif" font-size="12" fill="#8b98a5" text-anchor="middle">الترتيب بيبدأ من index رقم 0 مش 1</text>
+    </svg>
+  </div>
+
+  <div class="divider"></div>
+
+  <h2>أهم Array methods</h2>
+
+  <div class="card">
+    <p><strong>push / pop</strong> — إضافة أو حذف من الآخر</p>
+    <div class="code">
+<span class="kw">const</span> list = [<span class="str">"a"</span>, <span class="str">"b"</span>];
+list.<span class="fn">push</span>(<span class="str">"c"</span>);
+console.<span class="fn">log</span>(list);
+list.<span class="fn">pop</span>();
+console.<span class="fn">log</span>(list);
+      <div class="output ok"><span class="arrow">→</span><span class="line">["a", "b", "c"]</span></div>
+      <div class="output ok"><span class="arrow">→</span><span class="line">["a", "b"]</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p><strong>unshift / shift</strong> — إضافة أو حذف من الأول</p>
+    <div class="code">
+<span class="kw">const</span> list = [<span class="str">"b"</span>, <span class="str">"c"</span>];
+list.<span class="fn">unshift</span>(<span class="str">"a"</span>);
+console.<span class="fn">log</span>(list);
+      <div class="output ok"><span class="arrow">→</span><span class="line">["a", "b", "c"]</span></div>
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <strong>بمنطق بسيط:</strong> push/pop بيتعاملوا مع آخر العربية القطار، unshift/shift بيتعاملوا مع أول العربية. الاتنين ممكن يضيفوا أو يشيلوا، الفرق بس فين المكان.
+  </div>
+
+  <div class="divider"></div>
+
+  <h2>Objects — بيانات بمفاتيح</h2>
+
+  <div class="code">
+<span class="kw">const</span> user = {
+  name: <span class="str">"Youssef"</span>,
+  age: <span class="num">25</span>,
+  city: <span class="str">"Shibin El Kom"</span>
+};
+console.<span class="fn">log</span>(user.name);
+console.<span class="fn">log</span>(user[<span class="str">"city"</span>]);
+    <div class="output ok"><span class="arrow">→</span><span class="line">Youssef</span></div>
+    <div class="output ok"><span class="arrow">→</span><span class="line">Shibin El Kom</span></div>
+  </div>
+  <p class="muted">تقدر توصل للقيمة بطريقتين: dot notation (<span class="inline-code">user.name</span>) أو bracket notation (<span class="inline-code">user["city"]</span>). الطريقة التانية مفيدة لو اسم المفتاح متغير وليس ثابت.</p>
+
+  <div class="divider"></div>
+
+  <h2>النمط الأكتر شيوعًا: Array of Objects</h2>
+  <p>ده الشكل اللي هتشوفه في كل مكان تقريبًا، خصوصًا في Angular لما تعرض قايمة بيانات (زي قايمة مستخدمين أو منتجات):</p>
+
+  <div class="code">
+<span class="kw">const</span> users = [
+  { name: <span class="str">"Youssef"</span>, age: <span class="num">25</span> },
+  { name: <span class="str">"Ahmed"</span>, age: <span class="num">30</span> }
+];
+console.<span class="fn">log</span>(users[<span class="num">0</span>].name);
+console.<span class="fn">log</span>(users[<span class="num">1</span>].age);
+    <div class="output ok"><span class="arrow">→</span><span class="line">Youssef</span></div>
+    <div class="output ok"><span class="arrow">→</span><span class="line">30</span></div>
+  </div>
+  <p class="muted">array بيحتوي عناصر، كل عنصر منها object بيمثل "سجل" كامل بمعلوماته. ده بالظبط شكل البيانات اللي بتيجي من أي API غالبًا.</p>
+
+  <div class="divider"></div>
+
+  <h2><span class="badge">key</span> Higher-Order Array Methods</h2>
+  <p>دول أهم 3 دوال هتستخدمها كل يوم تقريبًا في الشغل، والتلاتة بياخدوا callback function (فاكر الدرس اللي فات؟):</p>
+
+  <div class="card">
+    <p><strong>forEach</strong> — نفّذ حاجة لكل عنصر، من غير ما ترجع نتيجة</p>
+    <div class="code">
+<span class="kw">const</span> nums = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+nums.<span class="fn">forEach</span>((n) => console.<span class="fn">log</span>(n * <span class="num">2</span>));
+      <div class="output ok"><span class="arrow">→</span><span class="line">2</span></div>
+      <div class="output ok"><span class="arrow">→</span><span class="line">4</span></div>
+      <div class="output ok"><span class="arrow">→</span><span class="line">6</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p><strong>map</strong> — حوّل كل عنصر لحاجة جديدة، وارجعلي array جديدة بالكامل</p>
+    <div class="code">
+<span class="kw">const</span> nums = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+<span class="kw">const</span> doubled = nums.<span class="fn">map</span>((n) => n * <span class="num">2</span>);
+console.<span class="fn">log</span>(doubled);
+      <div class="output ok"><span class="arrow">→</span><span class="line">[2, 4, 6]</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p><strong>filter</strong> — رجّعلي بس العناصر اللي بتحقق شرط معين</p>
+    <div class="code">
+<span class="kw">const</span> nums = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>];
+<span class="kw">const</span> evens = nums.<span class="fn">filter</span>((n) => n % <span class="num">2</span> === <span class="num">0</span>);
+console.<span class="fn">log</span>(evens);
+      <div class="output ok"><span class="arrow">→</span><span class="line">[2, 4]</span></div>
+    </div>
+  </div>
+
+  <div class="scope-diagram">
+    <svg viewBox="0 0 640 150" xmlns="http://www.w3.org/2000/svg">
+      <text x="320" y="18" font-family="Cairo, sans-serif" font-size="13" font-weight="700" fill="#8b98a5" text-anchor="middle">[1, 2, 3, 4] بتدخل في كل طريقة</text>
+
+      <rect x="30" y="35" width="150" height="60" rx="10" fill="rgba(53,185,156,0.06)" stroke="#35b99c" stroke-width="1.5"/>
+      <text x="105" y="58" font-family="JetBrains Mono, monospace" font-size="12" fill="#35b99c" text-anchor="middle">map</text>
+      <text x="105" y="78" font-family="Tajawal, sans-serif" font-size="11" fill="#8b98a5" text-anchor="middle">بيحوّل كل عنصر</text>
+
+      <rect x="245" y="35" width="150" height="60" rx="10" fill="rgba(227,165,72,0.06)" stroke="#e3a548" stroke-width="1.5"/>
+      <text x="320" y="58" font-family="JetBrains Mono, monospace" font-size="12" fill="#e3a548" text-anchor="middle">filter</text>
+      <text x="320" y="78" font-family="Tajawal, sans-serif" font-size="11" fill="#8b98a5" text-anchor="middle">بيصفّي حسب شرط</text>
+
+      <rect x="460" y="35" width="150" height="60" rx="10" fill="rgba(168,136,224,0.08)" stroke="#a888e0" stroke-width="1.5"/>
+      <text x="535" y="58" font-family="JetBrains Mono, monospace" font-size="12" fill="#a888e0" text-anchor="middle">forEach</text>
+      <text x="535" y="78" font-family="Tajawal, sans-serif" font-size="11" fill="#8b98a5" text-anchor="middle">بينفذ بس، مفيش نتيجة</text>
+
+      <text x="320" y="130" font-family="Tajawal, sans-serif" font-size="12" fill="#8b98a5" text-anchor="middle">التلاتة بياخدوا نفس array، بس كل واحد بيرجعلك حاجة مختلفة</text>
+    </svg>
+  </div>
+
+  <div class="callout tip">
+    <strong>ليه ده مهم في Angular:</strong> الطريقة دي بالظبط هي اللي هتستخدمها كل يوم عشان تجهّز بيانات من الـ API قبل ما تعرضها في الصفحة — مثلاً تعمل filter على قايمة منتجات، أو map عشان تجهّز شكل البيانات المناسب للعرض.
+  </div>
+
+  <div class="divider"></div>
+
+  <h2><span class="badge">new</span> Destructuring — استخراج القيم بسرعة</h2>
+  <p>اتضافت في ES6، وهي طريقة تختصر بيها استخراج قيم من array أو object من غير ما تكرر الاسم كل مرة:</p>
+
+  <div class="card">
+    <p><strong>قبلها (الطريقة القديمة):</strong></p>
+    <div class="code">
+<span class="kw">const</span> user = { name: <span class="str">"Youssef"</span>, age: <span class="num">25</span> };
+<span class="kw">const</span> name = user.name;
+<span class="kw">const</span> age = user.age;
+    </div>
+
+    <p><strong>بعدها (Destructuring):</strong></p>
+    <div class="code">
+<span class="kw">const</span> user = { name: <span class="str">"Youssef"</span>, age: <span class="num">25</span> };
+<span class="kw">const</span> { name, age } = user;
+console.<span class="fn">log</span>(name, age);
+      <div class="output ok"><span class="arrow">→</span><span class="line">Youssef 25</span></div>
+    </div>
+  </div>
+
+  <p class="muted">نفس الفكرة شغالة مع arrays برضو، بس بالترتيب مش بالاسم:</p>
+
+  <div class="code">
+<span class="kw">const</span> colors = [<span class="str">"red"</span>, <span class="str">"green"</span>, <span class="str">"blue"</span>];
+<span class="kw">const</span> [first, second] = colors;
+console.<span class="fn">log</span>(first, second);
+    <div class="output ok"><span class="arrow">→</span><span class="line">red green</span></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h2><span class="badge">new</span> Spread Operator — نشر العناصر</h2>
+  <p>الرمز <span class="inline-code">...</span> بياخد كل عناصر array أو object وينشرهم مكان تاني. مفيد جدًا لما تحب تعمل نسخة من array/object وتضيف عليها من غير ما تغيّر الأصلية:</p>
+
+  <div class="code">
+<span class="kw">const</span> nums1 = [<span class="num">1</span>, <span class="num">2</span>];
+<span class="kw">const</span> nums2 = [...nums1, <span class="num">3</span>, <span class="num">4</span>];
+console.<span class="fn">log</span>(nums2);
+    <div class="output ok"><span class="arrow">→</span><span class="line">[1, 2, 3, 4]</span></div>
+  </div>
+
+  <div class="code">
+<span class="kw">const</span> user = { name: <span class="str">"Youssef"</span> };
+<span class="kw">const</span> updatedUser = { ...user, age: <span class="num">25</span> };
+console.<span class="fn">log</span>(updatedUser);
+    <div class="output ok"><span class="arrow">→</span><span class="line">{ name: "Youssef", age: 25 }</span></div>
+  </div>
+
+  <div class="callout tip">
+    <strong>ليه ده مهم:</strong> فاكر درس Data Types لما اتكلمنا إن الـ objects بتشتغل بـ reference؟ الـ spread بيعملك نسخة جديدة فعليًا بدل ما تعدّل على الأصلية بالغلط. ده أسلوب أساسي في Angular وأي كود حديث عشان تتجنب الـ bugs بتاعة الـ reference.
+  </div>
+
+  <div class="divider"></div>
+
+  <h2>خلاصة: امتى تستخدم إيه</h2>
+  <table>
+    <tr><th>الأداة</th><th>استخدمها لما</th></tr>
+    <tr><td><code>Array</code></td><td>قايمة عناصر بترتيب معين، مش مهم أسماء</td></tr>
+    <tr><td><code>Object</code></td><td>بيانات مرتبطة بأسماء واضحة (مفاتيح)</td></tr>
+    <tr><td><code>map</code></td><td>عايز array جديدة بنفس العدد، بس القيم اتغيرت</td></tr>
+    <tr><td><code>filter</code></td><td>عايز جزء بس من array حسب شرط</td></tr>
+    <tr><td><code>forEach</code></td><td>عايز تنفذ حاجة بس، مش محتاج نتيجة جديدة</td></tr>
+    <tr><td>Destructuring</td><td>عايز تستخرج قيم بسرعة من غير تكرار</td></tr>
+    <tr><td>Spread</td><td>عايز نسخة جديدة، مش تعديل على الأصلية</td></tr>
+  </table>
+
+  <div class="quiz">
+    <div class="label">سؤال مقابلة 1</div>
+    <p>"إيه الفرق بين map و forEach؟" — سؤال أساسي جدًا، والإجابة الصح لازم تذكر إن map بترجع array جديدة وforEach لأ.</p>
+  </div>
+
+  <div class="quiz">
+    <div class="label">سؤال مقابلة 2</div>
+    <p>"إزاي تعمل نسخة من object من غير ما تأثر على الأصلي؟" — بيختبر فهمك لـ Spread Operator ومشكلة الـ Reference.</p>
+  </div>
+
+  <div class="quiz">
+    <div class="label">سؤال مقابلة 3</div>
+    <p>"إيه هو الـ Destructuring وليه بنستخدمه؟" — سؤال شائع في مقابلات الكود الحديث.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <h2><span class="badge">practice</span> تمرين: جرب نفسك</h2>
+  <p class="muted">اختار إجابة لكل سؤال، وهيبان لك على طول لو صح أو غلط مع الشرح.</p>
+
+  <div class="practice" data-question data-correct="b">
+    <div class="q-num">سؤال 1 / 6</div>
+    <div class="q-prompt">
+      إيه نتيجة الكود ده؟
+      <div class="code-inline">const arr = ["a", "b", "c"];
+console.log(arr[1]);</div>
+    </div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">"a"</button>
+      <button class="q-opt" data-id="b">"b"</button>
+      <button class="q-opt" data-id="c">"c"</button>
+      <button class="q-opt" data-id="d">undefined</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
+  <div class="practice" data-question data-correct="c">
+    <div class="q-num">سؤال 2 / 6</div>
+    <div class="q-prompt">أنهي method بترجع array جديدة بنفس عدد العناصر، بس بقيم متغيرة؟</div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">forEach</button>
+      <button class="q-opt" data-id="b">filter</button>
+      <button class="q-opt" data-id="c">map</button>
+      <button class="q-opt" data-id="d">push</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
+  <div class="practice" data-question data-correct="a">
+    <div class="q-num">سؤال 3 / 6</div>
+    <div class="q-prompt">
+      إيه نتيجة الكود ده؟
+      <div class="code-inline">const nums = [1, 2, 3, 4, 5];
+const result = nums.filter((n) => n > 3);
+console.log(result);</div>
+    </div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">[4, 5]</button>
+      <button class="q-opt" data-id="b">[1, 2, 3]</button>
+      <button class="q-opt" data-id="c">true</button>
+      <button class="q-opt" data-id="d">5</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
+  <div class="practice" data-question data-correct="b">
+    <div class="q-num">سؤال 4 / 6</div>
+    <div class="q-prompt">
+      إيه نتيجة الكود ده؟
+      <div class="code-inline">const user = { name: "Youssef" };
+const updated = { ...user, age: 25 };
+console.log(user);</div>
+    </div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">{ name: "Youssef", age: 25 }</button>
+      <button class="q-opt" data-id="b">{ name: "Youssef" }</button>
+      <button class="q-opt" data-id="c">undefined</button>
+      <button class="q-opt" data-id="d">Error</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
+  <div class="practice" data-question data-correct="c">
+    <div class="q-num">سؤال 5 / 6</div>
+    <div class="q-prompt">
+      إيه نتيجة الكود ده؟
+      <div class="code-inline">const point = { x: 10, y: 20 };
+const { x, y } = point;
+console.log(x, y);</div>
+    </div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">{ x: 10, y: 20 }</button>
+      <button class="q-opt" data-id="b">undefined undefined</button>
+      <button class="q-opt" data-id="c">10 20</button>
+      <button class="q-opt" data-id="d">Error</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
+  <div class="practice" data-question data-correct="d">
+    <div class="q-num">سؤال 6 / 6</div>
+    <div class="q-prompt">عايز تنفذ console.log لكل عنصر في array من غير ما تحتاج array جديدة كنتيجة، تستخدم إيه؟</div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">map</button>
+      <button class="q-opt" data-id="b">filter</button>
+      <button class="q-opt" data-id="c">push</button>
+      <button class="q-opt" data-id="d">forEach</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
+  <div class="footer-note">الدرس الجاي: Loops & Conditionals — التحكم في تدفق الكود</div>
+
+</div>
+
+<script>
+  const explanations = {
+    0: { ok: "الترتيب في Array بيبدأ من index رقم 0، فـ arr[1] هو العنصر التاني فعليًا وهو \"b\".", no: "فاكر إن الـ index بيبدأ من صفر مش من واحد؟" },
+    1: { ok: "map هي الوحيدة من التلاتة اللي بترجع array جديدة بنفس عدد العناصر، بس بعد ما تحول كل عنصر.", no: "forEach مبترجعش array جديدة، filter بتقلل العدد حسب شرط. فكر تاني." },
+    2: { ok: "filter بترجع بس العناصر اللي بتحقق الشرط، وهنا الأرقام الأكبر من 3 هي 4 و5.", no: "filter بتصفّي العناصر حسب شرط n > 3، جرب تطبقها على [1,2,3,4,5] يدويًا." },
+    3: { ok: "Spread عمل نسخة جديدة تمامًا (updated)، فـ user الأصلية فضلت زي ما هي من غير أي إضافة.", no: "فاكر إن الهدف من Spread إنه يعمل نسخة، مش يعدّل على الأصلية؟" },
+    4: { ok: "Destructuring استخرج x و y من point مباشرة في متغيرين منفصلين بنفس القيم.", no: "Destructuring بيستخرج القيم في متغيرات منفصلة، مش بيرجع الـ object كله." },
+    5: { ok: "forEach بينفذ حاجة لكل عنصر من غير ما يرجع array جديدة، وده بالظبط اللي محتاجينه هنا.", no: "فكر: هل محتاج نتيجة جديدة (array) ولا بس تنفيذ؟" }
+  };
+
+  document.querySelectorAll('[data-question]').forEach((q, idx) => {
+    const correctId = q.dataset.correct;
+    const feedback = q.querySelector('.q-feedback');
+    q.querySelectorAll('.q-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const opts = q.querySelectorAll('.q-opt');
+        opts.forEach(o => o.disabled = true);
+        const isCorrect = btn.dataset.id === correctId;
+        if (isCorrect) {
+          btn.classList.add('correct');
+        } else {
+          btn.classList.add('wrong');
+          q.querySelector('[data-id="' + correctId + '"]').classList.add('correct');
+        }
+        feedback.classList.add('show', isCorrect ? 'ok' : 'no');
+        feedback.innerHTML = '<strong>' + (isCorrect ? 'صح: ' : 'مش قصادها: ') + '</strong>' + explanations[idx][isCorrect ? 'ok' : 'no'];
+      });
+    });
+  });
+</script>
+</body>
+</html>
