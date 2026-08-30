@@ -65,7 +65,7 @@
     direction: ltr; text-align:left;
     background: var(--code-bg); border:1px solid var(--border); border-radius:12px;
     padding:16px 18px; font-family:'JetBrains Mono', monospace; font-size:14px;
-    overflow-x:auto; margin:14px 0; color:#c9d4de;
+    overflow-x:auto; margin:14px 0; color:#c9d4de; white-space:pre-wrap;
   }
   .code .kw{color:#c586c0;}
   .code .fn{color:#4fc1e9;}
@@ -92,6 +92,9 @@
   }
   .type-chip .name{ font-family:'JetBrains Mono', monospace; direction:ltr; font-size:13px; color:var(--teal); font-weight:600;}
   .type-chip .ex{ font-family:'JetBrains Mono', monospace; direction:ltr; font-size:12px; color:var(--muted); margin-top:4px;}
+
+  .scope-diagram{ margin: 18px 0; }
+  .scope-diagram svg{ width:100%; height:auto; display:block; }
 
   .callout{ border-radius:12px; padding:16px 18px; margin:18px 0; font-size:15.5px;}
   .callout.tip{ background:rgba(227,165,72,0.1); border:1px solid rgba(227,165,72,0.3); }
@@ -208,6 +211,30 @@ console.<span class="fn">log</span>(obj1.age, obj2.age);
     <p class="muted">obj1 اتغيرت هي كمان! لأن obj1 و obj2 بيشاورو على نفس المكان في الذاكرة، مش نسختين منفصلتين</p>
   </div>
 
+  <div class="scope-diagram">
+    <svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg">
+      <text x="150" y="18" font-family="Cairo, sans-serif" font-size="13" font-weight="700" fill="#e3a548" text-anchor="middle">Primitive: نسخ مستقل</text>
+      <rect x="55" y="35" width="70" height="40" rx="8" fill="#1a2129" stroke="#26303b" stroke-width="1.5"/>
+      <text x="90" y="59" font-family="JetBrains Mono, monospace" font-size="13" fill="#eceff2" text-anchor="middle">a = 10</text>
+      <rect x="175" y="35" width="70" height="40" rx="8" fill="#1a2129" stroke="#e3a548" stroke-width="1.5"/>
+      <text x="210" y="59" font-family="JetBrains Mono, monospace" font-size="13" fill="#e3a548" text-anchor="middle">b = 20</text>
+      <text x="150" y="100" font-family="Tajawal, sans-serif" font-size="12" fill="#8b98a5" text-anchor="middle">صندوقين منفصلين، كل واحد بقيمته لوحده</text>
+
+      <line x1="330" y1="110" x2="330" y2="10" stroke="#26303b" stroke-width="1"/>
+
+      <text x="490" y="18" font-family="Cairo, sans-serif" font-size="13" font-weight="700" fill="#35b99c" text-anchor="middle">Reference: مشاركة نفس المكان</text>
+      <rect x="450" y="35" width="55" height="30" rx="7" fill="#1a2129" stroke="#26303b" stroke-width="1.5"/>
+      <text x="477" y="55" font-family="JetBrains Mono, monospace" font-size="12" fill="#eceff2" text-anchor="middle">obj1</text>
+      <rect x="530" y="35" width="55" height="30" rx="7" fill="#1a2129" stroke="#26303b" stroke-width="1.5"/>
+      <text x="557" y="55" font-family="JetBrains Mono, monospace" font-size="12" fill="#eceff2" text-anchor="middle">obj2</text>
+      <line x1="477" y1="65" x2="510" y2="95" stroke="#35b99c" stroke-width="1.5"/>
+      <line x1="557" y1="65" x2="524" y2="95" stroke="#35b99c" stroke-width="1.5"/>
+      <rect x="475" y="98" width="70" height="34" rx="8" fill="rgba(53,185,156,0.12)" stroke="#35b99c" stroke-width="1.5"/>
+      <text x="510" y="120" font-family="JetBrains Mono, monospace" font-size="12" fill="#35b99c" text-anchor="middle">age: 20</text>
+      <text x="510" y="155" font-family="Tajawal, sans-serif" font-size="12" fill="#8b98a5" text-anchor="middle">نفس الصندوق، الاتنين بيشاوروا عليه</text>
+    </svg>
+  </div>
+
   <div class="callout tip">
     <strong>هنرجع لها:</strong> النقطة دي بالظبط هي اللي بتفرق كتير في Angular لما نتكلم عن Change Detection وObjects — امتى Angular بيحس إن حاجة اتغيرت وامتى لأ.
   </div>
@@ -249,24 +276,24 @@ value = <span class="lit">true</span>;
 
   <div class="divider"></div>
 
-  <h2>مصيدة تانية: = = مقابل = = =</h2>
+  <h2>مصيدة تانية: == مقابل ===</h2>
   <p>عشان JS بتحاول تكون "مرنة" في المقارنة، فيه فرق مهم بين عاملين:</p>
 
   <div class="code">
-console.<span class="fn">log</span>(<span class="num">5</span> = = <span class="str">"5"</span>);
-console.<span class="fn">log</span>(<span class="num">5</span> = = = <span class="str">"5"</span>);
+console.<span class="fn">log</span>(<span class="num">5</span> == <span class="str">"5"</span>);
+console.<span class="fn">log</span>(<span class="num">5</span> === <span class="str">"5"</span>);
     <div class="output warn"><span class="arrow">→</span><span class="line">true</span></div>
     <div class="output err"><span class="arrow">→</span><span class="line">false</span></div>
   </div>
 
   <table>
     <tr><th>العامل</th><th>بيعمل إيه</th></tr>
-    <tr><td><code>= =</code></td><td>بيحاول يحوّل النوعين لنفس النوع الأول، وبعدين يقارن</td></tr>
-    <tr><td><code>= = =</code></td><td>بيقارن القيمة والنوع مع بعض، من غير أي تحويل</td></tr>
+    <tr><td><code>==</code></td><td>بيحاول يحوّل النوعين لنفس النوع الأول، وبعدين يقارن</td></tr>
+    <tr><td><code>===</code></td><td>بيقارن القيمة والنوع مع بعض، من غير أي تحويل</td></tr>
   </table>
 
   <div class="callout tip">
-    <strong>القاعدة العملية:</strong> استخدم <span class="inline-code" style="background:rgba(227,165,72,0.15);">= = =</span> دايمًا تقريبًا. الـ <span class="inline-code" style="background:rgba(227,165,72,0.15);">= =</span> بيسبب bugs غريبة وغير متوقعة، وده سبب رئيسي إن TypeScript بيمنع المقارنة الغلط دي من الأساس.
+    <strong>القاعدة العملية:</strong> استخدم <span class="inline-code" style="background:rgba(227,165,72,0.15);">===</span> دايمًا تقريبًا. الـ <span class="inline-code" style="background:rgba(227,165,72,0.15);">==</span> بيسبب bugs غريبة وغير متوقعة، وده سبب رئيسي إن TypeScript بيمنع المقارنة الغلط دي من الأساس.
   </div>
 
   <div class="divider"></div>
@@ -284,7 +311,7 @@ console.<span class="fn">log</span>(<span class="num">5</span> = = = <span class
 
   <div class="quiz">
     <div class="label">سؤال مقابلة 1</div>
-    <p>"إيه الفرق بين = = و = = =؟" — سؤال أساسي في أي مقابلة JS مهما كان مستواها.</p>
+    <p>"إيه الفرق بين == و ===؟" — سؤال أساسي في أي مقابلة JS مهما كان مستواها.</p>
   </div>
 
   <div class="quiz">
@@ -402,7 +429,7 @@ console.log(obj1.x);</div>
           q.querySelector('[data-id="' + correctId + '"]').classList.add('correct');
         }
         feedback.classList.add('show', isCorrect ? 'ok' : 'no');
-        feedback.innerHTML = '<strong>' + (isCorrect ? 'صح: ' : 'مش صح: ') + '</strong>' + explanations[idx][isCorrect ? 'ok' : 'no'];
+        feedback.innerHTML = '<strong>' + (isCorrect ? 'صح: ' : 'مش قصادها: ') + '</strong>' + explanations[idx][isCorrect ? 'ok' : 'no'];
       });
     });
   });
