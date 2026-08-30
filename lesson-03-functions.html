@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدرس 3: الدوال</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;900&family=Tajawal:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #10151c;
+    --card: #1a2129;
+    --border: #26303b;
+    --text: #eceff2;
+    --muted: #8b98a5;
+    --amber: #e3a548;
+    --teal: #35b99c;
+    --red: #e2685f;
+    --purple: #a888e0;
+    --code-bg: #0d1319;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: radial-gradient(circle at 50% 0%, #1b232c 0%, var(--bg) 55%);
+    color: var(--text);
+    font-family:'Tajawal', sans-serif;
+    line-height:1.9;
+    padding: 32px 18px 80px;
+  }
+  .wrap{max-width:720px; margin:0 auto;}
+
+  .series-title{
+    direction: ltr; text-align: right;
+    font-family:'JetBrains Mono', monospace;
+    font-weight:600; font-size:12px; letter-spacing:2.5px;
+    color: var(--amber); margin-bottom:16px;
+  }
+  .eyebrow{ display:flex; align-items:center; gap:10px; color: var(--muted); font-size:14px; margin-bottom:10px;}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);}
+
+  h1{
+    font-family:'Cairo', sans-serif; font-weight:900;
+    font-size: clamp(28px, 6vw, 40px); margin: 0 0 6px; letter-spacing:-0.5px;
+  }
+  .subtitle{ color:var(--muted); font-size:16px; margin-bottom:36px;}
+
+  h2{
+    font-family:'Cairo', sans-serif; font-weight:700; font-size:21px;
+    margin: 44px 0 14px; display:flex; align-items:center; gap:10px;
+  }
+  h2 .badge{
+    font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:600;
+    color: var(--bg); background: var(--teal); padding:3px 9px; border-radius:20px; direction:ltr;
+  }
+  h2 .badge.old{ background: var(--muted); }
+
+  p{ color:#d7dde3; font-size:16.5px; margin:10px 0;}
+  .muted{color:var(--muted); font-size:15px;}
+  .inline-code{ font-family:'JetBrains Mono', monospace; direction:ltr; display:inline-block; background:var(--code-bg); padding:2px 8px; border-radius:6px; font-size:14px;}
+
+  .card{ background: var(--card); border:1px solid var(--border); border-radius:14px; padding:20px 22px; margin:16px 0;}
+
+  .code{
+    direction: ltr; text-align:left;
+    background: var(--code-bg); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; font-family:'JetBrains Mono', monospace; font-size:14px;
+    overflow-x:auto; margin:14px 0; color:#c9d4de; white-space:pre-wrap;
+  }
+  .code .kw{color:#c586c0;}
+  .code .fn{color:#4fc1e9;}
+  .code .str{color:var(--amber);}
+  .code .cm{color:#5c6773; font-style:italic;}
+  .code .num{color:#d19a66;}
+  .code .lit{color:var(--purple);}
+
+  .code .output{ margin-top:12px; padding-top:10px; border-top:1px dashed var(--border);}
+  .code .output .arrow{ color:var(--muted); margin-left:6px;}
+  .code .output.ok .line{ color: var(--teal); }
+  .code .output.err .line{ color: var(--red); }
+  .code .output.warn .line{ color: var(--amber); }
+
+  table{ width:100%; border-collapse:collapse; margin:16px 0; font-size:15px;}
+  th{ font-family:'Cairo', sans-serif; text-align:right; color:var(--muted); font-weight:700; padding:10px 12px; border-bottom:1px solid var(--border);}
+  td{ padding:12px; border-bottom:1px solid var(--border); }
+  td code{ font-family:'JetBrains Mono', monospace; background:var(--code-bg); padding:2px 8px; border-radius:6px; direction:ltr; display:inline-block;}
+
+  .scope-diagram{ margin: 18px 0; }
+  .scope-diagram svg{ width:100%; height:auto; display:block; }
+
+  .callout{ border-radius:12px; padding:16px 18px; margin:18px 0; font-size:15.5px;}
+  .callout.tip{ background:rgba(227,165,72,0.1); border:1px solid rgba(227,165,72,0.3); }
+  .callout.tip strong{ color: var(--amber); }
+  .callout.warn{ background:rgba(226,104,95,0.08); border:1px solid rgba(226,104,95,0.3); }
+  .callout.warn strong{ color: var(--red); }
+
+  .divider{ height:1px; background:var(--border); margin:44px 0;}
+
+  .quiz{
+    background: linear-gradient(135deg, rgba(53,185,156,0.08), rgba(53,185,156,0.02));
+    border:1px solid rgba(53,185,156,0.25); border-radius:14px; padding:20px 22px; margin-top:20px;
+  }
+  .quiz .label{ font-family:'Cairo', sans-serif; font-weight:700; color:var(--teal); font-size:14px; margin-bottom:8px;}
+  .quiz p{ margin:0; }
+  .quiz + .quiz{ margin-top:14px; }
+
+  .practice{
+    background: var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:20px 22px; margin:18px 0;
+  }
+  .practice .q-num{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--muted);
+    letter-spacing:1px; margin-bottom:6px;
+  }
+  .practice .q-prompt{
+    font-family:'Cairo', sans-serif; font-weight:700; font-size:16.5px; margin-bottom:14px;
+  }
+  .practice .q-prompt .code-inline{
+    direction:ltr; display:block; text-align:left; font-family:'JetBrains Mono', monospace;
+    background:var(--code-bg); border:1px solid var(--border); border-radius:10px;
+    padding:12px 14px; font-size:13.5px; margin-top:10px; color:#c9d4de; white-space:pre;
+  }
+  .q-options{ display:flex; flex-direction:column; gap:8px; }
+  .q-opt{
+    font-family:'Tajawal', sans-serif; font-size:15px; text-align:right;
+    background: var(--code-bg); border:1px solid var(--border); color:var(--text);
+    border-radius:10px; padding:11px 14px; cursor:pointer; transition:border-color .15s, background .15s;
+  }
+  .q-opt:hover:not(:disabled){ border-color: var(--teal); }
+  .q-opt:disabled{ cursor:default; }
+  .q-opt.correct{ background: rgba(53,185,156,0.15); border-color: var(--teal); color: var(--teal); }
+  .q-opt.wrong{ background: rgba(226,104,95,0.15); border-color: var(--red); color: var(--red); }
+  .q-feedback{
+    margin-top:12px; padding:12px 14px; border-radius:10px; font-size:14.5px;
+    display:none; line-height:1.8;
+  }
+  .q-feedback.show{ display:block; }
+  .q-feedback.ok{ background: rgba(53,185,156,0.1); border:1px solid rgba(53,185,156,0.3); color:#c8e9e0; }
+  .q-feedback.no{ background: rgba(226,104,95,0.1); border:1px solid rgba(226,104,95,0.3); color:#f0d0cd; }
+  .q-feedback strong{ font-family:'Cairo', sans-serif; }
+
+  .footer-note{ text-align:center; color:var(--muted); font-size:14px; margin-top:50px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="series-title">ANGULAR MASTERY JOURNAL</div>
+  <div class="eyebrow"><span class="dot"></span> المرحلة 0 · JavaScript · الدرس 3</div>
+  <h1>الدوال (Functions)</h1>
+  <div class="subtitle">كتلة كود معاها اسم، تقدر تناديها براحتك أي وقت وهي تنفذ نفس الشغل</div>
+
+  <div class="code">
+<span class="kw">function</span> <span class="fn">greet</span>(name) {
+  <span class="kw">return</span> <span class="str">"Hello, "</span> + name;
+}
+console.<span class="fn">log</span>(<span class="fn">greet</span>(<span class="str">"Youssef"</span>));
+    <div class="output ok"><span class="arrow">→</span><span class="line">Hello, Youssef</span></div>
+  </div>
+
+  <div class="callout tip">
+    <strong>بمنطق بسيط:</strong> الـ function زي آلة قهوة — بتاخد منك حاجة (اختياري)، بتشتغل عليها، وبترجعلك نتيجة. وإنت اللي تقرر تمسك النتيجة دي جوه متغير ولا تسيبها تروح في الهوا.
+  </div>
+
+  <div class="divider"></div>
+
+  <h2>3 طرق تكتب بيها function</h2>
+  <p>زي المتغيرات، فيه أكتر من طريقة تعرّف بيها دالة، وكل واحدة ليها استخدام مختلف:</p>
+
+  <div class="card">
+    <p><strong>1. Function Declaration</strong> — الطريقة التقليدية</p>
+    <div class="code"><span class="kw">function</span> <span class="fn">add</span>(a, b) {
+  <span class="kw">return</span> a + b;
+}</div>
+
+    <p><strong>2. Function Expression</strong> — الدالة بتتخزن جوه متغير</p>
+    <div class="code"><span class="kw">const</span> add = <span class="kw">function</span>(a, b) {
+  <span class="kw">return</span> a + b;
+};</div>
+
+    <p><strong>3. Arrow Function</strong> — الأحدث، شكل مختصر</p>
+    <div class="code"><span class="kw">const</span> add = (a, b) => a + b;</div>
+  </div>
+
+  <p class="muted">بمنطق بسيط: التلاتة طرق بيعملوا نفس الحاجة بالظبط، الفرق بينهم بس في الشكل ووقت إنك تقدر تستخدمها بدري ولا لأ. في الشغل الحقيقي هتلاقي الناس بتستخدم Arrow Function في أغلب الوقت لأنها الأحدث والأقصر.</p>
+
+  <div class="divider"></div>
+
+  <h2><span class="badge old">legacy</span> الفرق العملي بين declaration و expression</h2>
+
+  <p>الفرق مش بس شكلي، فيه فرق حقيقي في السلوك بسبب حاجة اسمها Hoisting (اللي اتكلمنا عنها في درس المتغيرات):</p>
+
+  <div class="code">
+console.<span class="fn">log</span>(<span class="fn">sayHi</span>());
+
+<span class="kw">function</span> <span class="fn">sayHi</span>() {
+  <span class="kw">return</span> <span class="str">"Hi!"</span>;
+}
+    <div class="output ok"><span class="arrow">→</span><span class="line">Hi!</span></div>
+  </div>
+  <p class="muted">اشتغلت! لأن Function Declaration بتترفع بالكامل لفوق الملف (اسمها ومحتواها)، فتقدر تناديها قبل ما توصل لسطرها فعليًا.</p>
+
+  <div class="code">
+console.<span class="fn">log</span>(<span class="fn">sayBye</span>());
+
+<span class="kw">const</span> sayBye = <span class="kw">function</span>() {
+  <span class="kw">return</span> <span class="str">"Bye!"</span>;
+};
+    <div class="output err"><span class="arrow">→</span><span class="line">Uncaught ReferenceError: Cannot access 'sayBye' before initialization</span></div>
+  </div>
+  <p class="muted">فشلت! لأن sayBye هنا معرّفة بـ const، ومتغيرات const/let بتترفع بس بتفضل في Temporal Dead Zone لحد ما سطرها ييجي فعليًا.</p>
+
+  <div class="divider"></div>
+
+  <h2><span class="badge">new</span> Arrow Functions — المشكلة اللي جت تحلها</h2>
+  <p>Arrow functions اتضافت في ES6 (2015)، وهي مش بس اختصار شكلي. أهم فرق حقيقي بينها وبين function العادية هو التصرف مع <span class="inline-code">this</span>.</p>
+
+  <div class="callout tip">
+    <strong>بمنطق بسيط:</strong> this زي كلمة "أنا" — مش بتقصد حاجة ثابتة، هي بتقصد "مين اللي بيتكلم دلوقتي". لما function عادية تتحط جوه function تانية، هي بتدخل "تتكلم بصوتها هي" فـ this بتتلخبط. أما arrow function معندهاش "أنا" خاصة بيها، فبتسيب الكلام لمين ما كان بيتكلم من الأول.
+  </div>
+
+  <div class="scope-diagram">
+    <svg viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg">
+      <text x="150" y="18" font-family="Cairo, sans-serif" font-size="13" font-weight="700" fill="#e2685f" text-anchor="middle">function عادية: الرابط بيتقطع</text>
+      <rect x="35" y="32" width="230" height="90" rx="10" fill="rgba(226,104,95,0.06)" stroke="#26303b" stroke-width="1.5"/>
+      <text x="150" y="48" font-family="JetBrains Mono, monospace" font-size="11" fill="#8b98a5" text-anchor="middle">user (this ✓)</text>
+      <rect x="55" y="58" width="190" height="50" rx="8" fill="none" stroke="#e2685f" stroke-width="1.5" stroke-dasharray="5,4"/>
+      <text x="150" y="88" font-family="JetBrains Mono, monospace" font-size="11" fill="#e2685f" text-anchor="middle">function(hobby) { this ✕ }</text>
+      <text x="150" y="140" font-family="Tajawal, sans-serif" font-size="12" fill="#8b98a5" text-anchor="middle">حدود جديدة اتعملت، this ضاعت</text>
+
+      <line x1="330" y1="150" x2="330" y2="10" stroke="#26303b" stroke-width="1"/>
+
+      <text x="490" y="18" font-family="Cairo, sans-serif" font-size="13" font-weight="700" fill="#35b99c" text-anchor="middle">arrow function: الرابط فاضل</text>
+      <rect x="375" y="32" width="230" height="90" rx="10" fill="rgba(53,185,156,0.06)" stroke="#35b99c" stroke-width="1.5"/>
+      <text x="490" y="48" font-family="JetBrains Mono, monospace" font-size="11" fill="#8b98a5" text-anchor="middle">user (this ✓)</text>
+      <rect x="395" y="58" width="190" height="50" rx="8" fill="none" stroke="#35b99c" stroke-width="1.5"/>
+      <text x="490" y="88" font-family="JetBrains Mono, monospace" font-size="11" fill="#35b99c" text-anchor="middle">(hobby) =&gt; { this ✓ }</text>
+      <text x="490" y="140" font-family="Tajawal, sans-serif" font-size="12" fill="#8b98a5" text-anchor="middle">مفيش حدود جديدة، this فضلت زي ما هي</text>
+    </svg>
+  </div>
+
+  <div class="card">
+    <p><strong>المشكلة قديمًا مع function العادية:</strong></p>
+    <div class="code"><span class="kw">const</span> user = {
+  name: <span class="str">"Youssef"</span>,
+  hobbies: [<span class="str">"coding"</span>, <span class="str">"reading"</span>],
+  <span class="fn">printHobbies</span>: <span class="kw">function</span>() {
+    <span class="kw">this</span>.hobbies.<span class="fn">forEach</span>(<span class="kw">function</span>(hobby) {
+      console.<span class="fn">log</span>(<span class="kw">this</span>.name + <span class="str">": "</span> + hobby);
+    });
+  }
+};
+user.<span class="fn">printHobbies</span>();
+      <div class="output err"><span class="arrow">→</span><span class="line">TypeError: Cannot read properties of undefined (reading 'name')</span></div>
+    </div>
+    <p class="muted">داخل function العادية جوه forEach، الـ this اتغيّرت وما بقتش تشاور على user تاني.</p>
+  </div>
+
+  <div class="card">
+    <p><strong>الحل بـ Arrow Function:</strong></p>
+    <div class="code"><span class="kw">const</span> user = {
+  name: <span class="str">"Youssef"</span>,
+  hobbies: [<span class="str">"coding"</span>, <span class="str">"reading"</span>],
+  <span class="fn">printHobbies</span>: <span class="kw">function</span>() {
+    <span class="kw">this</span>.hobbies.<span class="fn">forEach</span>((hobby) => {
+      console.<span class="fn">log</span>(<span class="kw">this</span>.name + <span class="str">": "</span> + hobby);
+    });
+  }
+};
+user.<span class="fn">printHobbies</span>();
+      <div class="output ok"><span class="arrow">→</span><span class="line">Youssef: coding</span></div>
+      <div class="output ok"><span class="arrow">→</span><span class="line">Youssef: reading</span></div>
+    </div>
+    <p class="muted">Arrow function معندهاش this خاص بيها، فبتستخدم this بتاع الكود اللي حواليها. المشكلة اتحلت من جذورها.</p>
+  </div>
+
+  <div class="callout tip">
+    <strong>ليه ده مهم في Angular:</strong> هتشوف arrow functions في كل حتة تقريبًا جوه Components وServices، خصوصًا في callbacks وsubscriptions، بالظبط عشان مشكلة الـ this دي.
+  </div>
+
+  <div class="divider"></div>
+
+  <h2>Parameters و Default Values</h2>
+  <p>تقدر تدي parameter قيمة افتراضية لو محدش بعتها:</p>
+
+  <div class="code">
+<span class="kw">function</span> <span class="fn">greet</span>(name = <span class="str">"friend"</span>) {
+  <span class="kw">return</span> <span class="str">"Hello, "</span> + name;
+}
+console.<span class="fn">log</span>(<span class="fn">greet</span>());
+console.<span class="fn">log</span>(<span class="fn">greet</span>(<span class="str">"Ahmed"</span>));
+    <div class="output ok"><span class="arrow">→</span><span class="line">Hello, friend</span></div>
+    <div class="output ok"><span class="arrow">→</span><span class="line">Hello, Ahmed</span></div>
+  </div>
+  <p class="muted">دي إضافة من ES6 كمان. قديمًا كان لازم تتحقق يدويًا جوه الدالة لو الـ parameter مش موجود.</p>
+
+  <div class="divider"></div>
+
+  <h2>Callback Functions — دالة بتتبعت لدالة تانية</h2>
+  <p>مفهوم أساسي هتقابله كتير جدًا: دالة تقدر تستقبل دالة تانية كـ parameter، وتناديها هي بنفسها في الوقت المناسب:</p>
+
+  <div class="code">
+<span class="kw">function</span> <span class="fn">processOrder</span>(orderName, onDone) {
+  console.<span class="fn">log</span>(<span class="str">"Preparing: "</span> + orderName);
+  <span class="fn">onDone</span>();
+}
+
+<span class="fn">processOrder</span>(<span class="str">"Coffee"</span>, () => {
+  console.<span class="fn">log</span>(<span class="str">"Done!"</span>);
+});
+    <div class="output ok"><span class="arrow">→</span><span class="line">Preparing: Coffee</span></div>
+    <div class="output ok"><span class="arrow">→</span><span class="line">Done!</span></div>
+  </div>
+  <p class="muted">الـ arrow function اللي بعتناها هنا اسمها callback. المفهوم ده أساس فهم Promises، async/await، و Event handling في Angular لاحقًا.</p>
+
+  <div class="divider"></div>
+
+  <h2>خلاصة: امتى تستخدم كل نوع</h2>
+  <table>
+    <tr><th>النوع</th><th>استخدمه لما</th></tr>
+    <tr><td><code>function</code> declaration</td><td>دالة رئيسية عايز تناديها من أي مكان في الملف حتى قبل تعريفها</td></tr>
+    <tr><td><code>function</code> expression</td><td>نادرًا، أو لو محتاج تتحكم بدقة في وقت توفر الدالة</td></tr>
+    <tr><td>Arrow function</td><td>الافتراضي في الكود الحديث، خصوصًا جوه callbacks وmethods تانية</td></tr>
+  </table>
+
+  <div class="quiz">
+    <div class="label">سؤال مقابلة 1</div>
+    <p>"إيه الفرق بين Function Declaration و Function Expression؟" — سؤال أساسي بيختبر فهمك للـ Hoisting.</p>
+  </div>
+
+  <div class="quiz">
+    <div class="label">سؤال مقابلة 2</div>
+    <p>"إيه الفرق الحقيقي بين Arrow Function و function العادية؟" — الإجابة الصح لازم تذكر this، مش بس الشكل المختصر.</p>
+  </div>
+
+  <div class="quiz">
+    <div class="label">سؤال مقابلة 3</div>
+    <p>"إيه هو الـ Callback Function وإديني مثال عليه؟" — أساس لفهم async programming بعد كده.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <h2><span class="badge">practice</span> تمرين: جرب نفسك</h2>
+  <p class="muted">اختار إجابة لكل سؤال، وهيبان لك على طول لو صح أو غلط مع الشرح.</p>
+
+  <div class="practice" data-question data-correct="a">
+    <div class="q-num">سؤال 1 / 5</div>
+    <div class="q-prompt">
+      إيه نتيجة الكود ده؟
+      <div class="code-inline">console.log(sayHi());
+
+function sayHi() {
+  return "Hi!";
+}</div>
+    </div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">"Hi!"</button>
+      <button class="q-opt" data-id="b">undefined</button>
+      <button class="q-opt" data-id="c">ReferenceError</button>
+      <button class="q-opt" data-id="d">TypeError</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
+  <div class="practice" data-question data-correct="c">
+    <div class="q-num">سؤال 2 / 5</div>
+    <div class="q-prompt">
+      إيه نتيجة الكود ده؟
+      <div class="code-inline">console.log(sayBye());
+
+const sayBye = function() {
+  return "Bye!";
+};</div>
+    </div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">"Bye!"</button>
+      <button class="q-opt" data-id="b">undefined</button>
+      <button class="q-opt" data-id="c">ReferenceError</button>
+      <button class="q-opt" data-id="d">TypeError</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
+  <div class="practice" data-question data-correct="b">
+    <div class="q-num">سؤال 3 / 5</div>
+    <div class="q-prompt">الفرق الحقيقي بين Arrow Function وfunction العادية بيتعلق أساسًا بإيه؟</div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">السرعة في التنفيذ</button>
+      <button class="q-opt" data-id="b">قيمة this</button>
+      <button class="q-opt" data-id="c">عدد الـ parameters المسموح بيها</button>
+      <button class="q-opt" data-id="d">مفيش فرق حقيقي، بس شكل مختلف</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
+  <div class="practice" data-question data-correct="a">
+    <div class="q-num">سؤال 4 / 5</div>
+    <div class="q-prompt">
+      إيه نتيجة الكود ده؟
+      <div class="code-inline">function greet(name = "friend") {
+  return "Hello, " + name;
+}
+console.log(greet());</div>
+    </div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">Hello, friend</button>
+      <button class="q-opt" data-id="b">Hello, undefined</button>
+      <button class="q-opt" data-id="c">Error</button>
+      <button class="q-opt" data-id="d">Hello,</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
+  <div class="practice" data-question data-correct="c">
+    <div class="q-num">سؤال 5 / 5</div>
+    <div class="q-prompt">الدالة اللي بتتبعت كـ parameter لدالة تانية عشان تتنادى لاحقًا، اسمها إيه؟</div>
+    <div class="q-options">
+      <button class="q-opt" data-id="a">Higher function</button>
+      <button class="q-opt" data-id="b">Inner function</button>
+      <button class="q-opt" data-id="c">Callback function</button>
+      <button class="q-opt" data-id="d">Async function</button>
+    </div>
+    <div class="q-feedback"></div>
+  </div>
+
+  <div class="footer-note">الدرس الجاي: Arrays &amp; Objects — التعامل مع مجموعات البيانات</div>
+
+</div>
+
+<script>
+  const explanations = {
+    0: { ok: "Function Declaration بتترفع بالكامل (اسمها ومحتواها) لفوق الملف، فتقدر تناديها قبل سطر تعريفها.", no: "فكر في الفرق بين Function Declaration و Function Expression في الـ Hoisting." },
+    1: { ok: "sayBye معرّفة بـ const، فمتغيرات const/let بتترفع بس بتفضل في Temporal Dead Zone لحد ما سطرها ييجي فعليًا.", no: "sayBye هنا Function Expression جوه const، مش بتترفع بنفس طريقة declaration." },
+    2: { ok: "Arrow function معندهاش this خاص بيها، فبتستخدم this بتاع الكود اللي حواليها. ده الفرق الجوهري، مش بس اختصار في الشكل.", no: "فكر في مثال forEach اللي شفناه، إيه اللي اتغير هناك بالظبط؟" },
+    3: { ok: "لما محدش يبعت قيمة، الـ default value بتتفعل تلقائيًا.", no: "greet() اتنادت من غير أي parameter، فالـ default value المفروض تشتغل." },
+    4: { ok: "دالة بتتبعت كـ parameter لدالة تانية، وبتتنادى من جواها في الوقت المناسب، اسمها Callback function.", no: "راجع مثال processOrder، الدالة اللي بعتناها لـ onDone اسمها إيه؟" }
+  };
+
+  document.querySelectorAll('[data-question]').forEach((q, idx) => {
+    const correctId = q.dataset.correct;
+    const feedback = q.querySelector('.q-feedback');
+    q.querySelectorAll('.q-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const opts = q.querySelectorAll('.q-opt');
+        opts.forEach(o => o.disabled = true);
+        const isCorrect = btn.dataset.id === correctId;
+        if (isCorrect) {
+          btn.classList.add('correct');
+        } else {
+          btn.classList.add('wrong');
+          q.querySelector('[data-id="' + correctId + '"]').classList.add('correct');
+        }
+        feedback.classList.add('show', isCorrect ? 'ok' : 'no');
+        feedback.innerHTML = '<strong>' + (isCorrect ? 'صح: ' : 'مش قصادها: ') + '</strong>' + explanations[idx][isCorrect ? 'ok' : 'no'];
+      });
+    });
+  });
+</script>
+</body>
+</html>
